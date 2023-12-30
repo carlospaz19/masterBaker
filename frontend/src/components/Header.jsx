@@ -1,6 +1,6 @@
 import React from "react";
 import "./Header.css";
-import { Link } from "react-router-dom"; // Asegúrate de haber instalado react-router-dom
+import { Link } from "react-router-dom";
 
 const Header = ({ isAuthenticated }) => {
   return (

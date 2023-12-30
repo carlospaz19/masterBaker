@@ -10,7 +10,6 @@
 .header .logo {
   font-size: 1.5rem;
   font-weight: bold;
-  /* Si quieres que el logo también esté alineado con los enlaces */
   display: flex;
   align-items: center;
 }

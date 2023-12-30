@@ -2,10 +2,10 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
-const User = require("./models/User"); // Asegúrate de importar el modelo de usuario
+const User = require("./models/User");
 const jwt = require("jsonwebtoken");
 const Cart = require("./models/Cart");
-const Product = require("./models/Product"); // Asegúrate de importar el modelo de producto
+const Product = require("./models/Product");
 const Order = require("./models/Order");
 const authenticate = require("./middlewares/authenticate");
 
@@ -16,74 +16,19 @@ const port = process.env.PORT || 5001;
 app.use(cors());
 app.use(express.json());
 
-// Conexión a MongoDB
+// Connection to MongoDB
 mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => console.log("MongoDB connection established"))
   .catch((err) => console.log(err));
 
-// Rutas CRUD
-// GET: Listar todos los productos
-app.get("/products", async (req, res) => {
-  try {
-    const products = await Product.find();
-    res.json(products);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// POST: Crear un nuevo producto
-app.post("/products", async (req, res) => {
-  const product = new Product({
-    name: req.body.name,
-    price: req.body.price,
-    description: req.body.description,
-  });
-
-  try {
-    const newProduct = await product.save();
-    res.status(201).json(newProduct);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
-
-// PUT: Actualizar un producto existente por ID
-app.put("/products/:id", async (req, res) => {
-  try {
-    const updatedProduct = await Product.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
-    if (!updatedProduct) {
-      return res.status(404).json({ message: "Product not found" });
-    }
-    res.json(updatedProduct);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
-
-// DELETE: Eliminar un producto por ID
-app.delete("/products/:id", async (req, res) => {
-  try {
-    const product = await Product.findByIdAndDelete(req.params.id);
-    if (!product) {
-      return res.status(404).json({ message: "Product not found" });
-    }
-    res.json({ message: "Product deleted" });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// Configuración del servidor
+// Server configuration
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
 
+// CRUD Users
+// Register user
 app.post("/register", async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body;
@@ -95,7 +40,7 @@ app.post("/register", async (req, res) => {
   }
 });
 
-// Ruta GET para listar todos los usuarios
+// GET to list all users
 app.get("/users", async (req, res) => {
   try {
     const users = await User.find({}); // Encuentra todos los usuarios
@@ -114,6 +59,7 @@ app.get("/users", async (req, res) => {
   }
 });
 
+// Login user
 app.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -124,7 +70,7 @@ app.post("/login", async (req, res) => {
         .json({ message: "Email or Password is incorrect" });
     }
 
-    // Crear un token JWT
+    // Create token JWT
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
@@ -134,9 +80,66 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// Eliminar producto del carrito
+// CRUD Products
+// GET: List all products
+app.get("/products", async (req, res) => {
+  try {
+    const products = await Product.find();
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// POST: Create new product
+app.post("/products", async (req, res) => {
+  const product = new Product({
+    name: req.body.name,
+    price: req.body.price,
+    description: req.body.description,
+  });
+
+  try {
+    const newProduct = await product.save();
+    res.status(201).json(newProduct);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// PUT: Update product by ID
+app.put("/products/:id", async (req, res) => {
+  try {
+    const updatedProduct = await Product.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+    if (!updatedProduct) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    res.json(updatedProduct);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// DELETE: Remove product by Id
+app.delete("/products/:id", async (req, res) => {
+  try {
+    const product = await Product.findByIdAndDelete(req.params.id);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    res.json({ message: "Product deleted" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// CRUD Cart
+// Delete product from Cart
 app.post("/cart/remove", authenticate, async (req, res) => {
-  // Obtiene el ID del producto desde el cuerpo de la solicitud
   const { productId } = req.body;
 
   if (!productId) {
@@ -144,16 +147,16 @@ app.post("/cart/remove", authenticate, async (req, res) => {
   }
 
   try {
-    // Obtiene el ID del usuario del middleware de autenticación
+    // Get the ID of theuser from the authentication middleware
     const userId = req.user.userId;
 
-    // Busca el carrito del usuario
+    // Look for the cart of the user
     const cart = await Cart.findOne({ userId });
     if (!cart) {
       return res.status(404).json({ message: "Cart not found." });
     }
 
-    // Encuentra el índice del producto en el carrito
+    // Find the index of the product in the cart
     const productIndex = cart.products.findIndex((item) =>
       item.productId.equals(productId)
     );
@@ -164,10 +167,10 @@ app.post("/cart/remove", authenticate, async (req, res) => {
         .json({ message: "Product not found in the cart." });
     }
 
-    // Elimina el producto del carrito
+    // Remove the product from the cart
     cart.products.splice(productIndex, 1);
 
-    // Guarda los cambios en el carrito
+    // Saves the changes in the cart
     await cart.save();
 
     res.status(200).json({ message: "Product deleted from the cart.", cart });
@@ -176,35 +179,33 @@ app.post("/cart/remove", authenticate, async (req, res) => {
   }
 });
 
-// Finalizar compra
+// Finalize the purchase
 app.post("/cart/checkout", authenticate, async (req, res) => {
   try {
-    // Obtiene el ID del usuario del middleware de autenticación
     const userId = req.user.userId;
 
-    // Busca el carrito del usuario
+    // Finds the cart of the user
     const cart = await Cart.findOne({ userId }).populate("products.productId");
     if (!cart || cart.products.length === 0) {
       return res.status(400).json({ message: "The cart is empty." });
     }
 
-    // Procesar los productos en el carrito (Ejemplo básico)
+    // Process the products in the cart
     let total = 0;
     cart.products.forEach((item) => {
       total += item.productId.price * item.quantity;
-      // Aquí podrías también disminuir el stock del producto, si manejas inventario
     });
 
-    // Crear una orden (necesitas definir un modelo Order si aún no lo has hecho)
+    // Creates the order
     const order = new Order({
       userId,
       products: cart.products,
       total,
-      // Aquí puedes añadir más campos como dirección de envío, etc.
+      address,
     });
     await order.save();
 
-    // Vaciar el carrito
+    // Empty cart
     cart.products = [];
     await cart.save();
 
@@ -214,9 +215,8 @@ app.post("/cart/checkout", authenticate, async (req, res) => {
   }
 });
 
-// Ruta para agregar un producto al carrito
+// Route the add the product to the cart
 app.post("/cart/add", authenticate, async (req, res) => {
-  // Obtiene el ID del producto y la cantidad desde el cuerpo de la solicitud
   const { productId, quantity } = req.body;
 
   if (!productId || !quantity) {
@@ -226,35 +226,35 @@ app.post("/cart/add", authenticate, async (req, res) => {
   }
 
   try {
-    // Verificar si el producto existe
+    // Verifying if the product exists
     const product = await Product.findById(productId);
     if (!product) {
       return res.status(404).json({ message: "Product not found." });
     }
 
-    // Obtiene el ID del usuario del middleware de autenticación
+    // Obtains the user ID from the authentication middleware
     const userId = req.user.userId;
 
-    // Busca el carrito del usuario o crea uno nuevo si no existe
+    // Look for the cart of the user or creates a new one if doesn't exist
     let cart = await Cart.findOne({ userId });
     if (!cart) {
       cart = new Cart({ userId, products: [] });
     }
 
-    // Busca si el producto ya existe en el carrito
+    // Look if the product exists in the cart
     const productIndex = cart.products.findIndex((item) =>
       item.productId.equals(productId)
     );
 
     if (productIndex > -1) {
-      // Producto ya existe en el carrito, actualiza la cantidad
+      // Product already exists in the cart, updating the quantity
       cart.products[productIndex].quantity += quantity;
     } else {
-      // Producto no existe en el carrito, lo añade
+      // Product does not exist, updating the quantity
       cart.products.push({ productId, quantity });
     }
 
-    // Guarda los cambios en el carrito
+    // Saves the changes in the cart
     await cart.save();
 
     res.status(200).json({ message: "Product added to the cart.", cart });
@@ -263,26 +263,25 @@ app.post("/cart/add", authenticate, async (req, res) => {
   }
 });
 
-// Ruta para obtener el carrito del usuario
+// Route to obtain the cart of the user
 app.get("/cart", authenticate, async (req, res) => {
   try {
-    // Obtiene el ID del usuario del middleware de autenticación
     const userId = req.user.userId;
 
-    // Busca el carrito del usuario
+    // Look for the cart of the user
     const cart = await Cart.findOne({ userId }).populate("products.productId");
 
     if (!cart) {
       return res.status(404).json({ message: "Cart not found." });
     }
 
-    // Opcional: Puedes calcular el total aquí si no se almacena en la base de datos
+    // Optional: Calculate the total of the cart if no saved in the DB
     const total = cart.products.reduce(
       (acc, item) => acc + item.quantity * item.productId.price,
       0
     );
 
-    // Devuelve el carrito con el total calculado
+    // Returns cart total
     res.status(200).json({ cart: cart.products, total });
   } catch (error) {
     res.status(500).json({ message: error.message });
