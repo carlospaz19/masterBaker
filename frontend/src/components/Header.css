@@ -1,0 +1,49 @@
+.header {
+  width: 100vw;
+  background-color: chocolate;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header .logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  /* Si quieres que el logo también esté alineado con los enlaces */
+  display: flex;
+  align-items: center;
+}
+
+.header .logo img {
+  filter: invert(100%) brightness(100%);
+  width: 50px;
+  height: auto;
+}
+
+.header .logo h3 {
+  margin-left: 10px;
+}
+
+.logo {
+  padding-left: 30px;
+}
+
+.nav {
+  padding-right: 30px;
+}
+
+.header .nav {
+  display: flex;
+}
+
+.header .nav a {
+  color: white;
+  text-decoration: none;
+  margin-left: 20px;
+  transition: color 0.3s;
+}
+
+.header .nav a:hover {
+  color: #ddd;
+}
