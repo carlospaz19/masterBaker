@@ -10,7 +10,7 @@ const Order = require("./models/Order");
 const authenticate = require("./middlewares/authenticate");
 
 const app = express();
-const port = process.env.PORT || 5001;
+const port = process.env.PORT;
 
 // Middleware
 app.use(cors());
