@@ -56,8 +56,8 @@
 
 .welcome-images img {
   border-radius: 10px;
-  width: 80%; /* Asegura que la imagen siempre llene el ancho del contenedor */
-  height: auto; /* Asegura que la imagen siempre llene la altura del contenedor */
-  object-fit: cover; /* Mantiene la relación de aspecto, recortando el exceso de imagen */
-  object-position: center; /* Centra la imagen dentro del contenedor */
+  width: 80%;
+  height: auto;
+  object-fit: cover;
+  object-position: center;
 }
