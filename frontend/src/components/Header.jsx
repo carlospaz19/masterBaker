@@ -10,8 +10,9 @@ const Header = ({ isAuthenticated }) => {
         <h3>Master Baker</h3>
       </div>
       <nav className="nav">
-        <Link to="/products">Products</Link>
+        <Link to="/">Welcome</Link>
         <Link to="/about">About Us</Link>
+        {isAuthenticated && <Link to="/products">Products</Link>}
         {!isAuthenticated && <Link to="/login">Login</Link>}
         {!isAuthenticated && <Link to="/register">Register</Link>}
         {isAuthenticated && <Link to="/cart">Cart</Link>}

@@ -1,5 +1,9 @@
 import { useState } from "react";
+import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
 import Header from "./components/Header";
+import Footer from "./components/Footer";
+import Welcome from "./components/Welcome";
+import About from "./components/About";
 import "./App.css";
 
 function App() {
@@ -14,9 +18,14 @@ function App() {
   };
 
   return (
-    <div>
+    <Router>
       <Header isAuthenticated={isAuthenticated} />
-    </div>
+      <Routes>
+        <Route path="/" element={<Welcome />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
+      <Footer />
+    </Router>
   );
 }
 
