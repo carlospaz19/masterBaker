@@ -1,43 +1,63 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import axios from "axios";
+import "./LoginPage.css";
 
 const LoginPage = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth();
 
-  const handleLogin = (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
-    // Aquí puedes implementar la lógica de login
-    // Por ejemplo, hacer una solicitud a tu backend
-    console.log("Login:", username, password);
 
-    // Navegar a otra página después del login
-    navigate("/"); // Redirige al usuario a la página principal
+    try {
+      const response = await axios.post(
+        "https://masterbaker.onrender.com/login",
+        {
+          email,
+          password,
+        }
+      );
+      const { token } = response.data;
+
+      if (token) {
+        login(token); // Updates the authentication state and saves the token
+        navigate("/");
+      } else {
+        console.error("No se recibió token del backend");
+      }
+    } catch (error) {
+      console.error("Login Error:", error.response);
+    }
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <div>
-          <label>Username:</label>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <button type="submit">Login</button>
-      </form>
+    <div className="login-section">
+      <div className="login-container">
+        <h2>Login</h2>
+        <form className="login-form" onSubmit={handleLogin}>
+          <div>
+            <label>Username: </label>
+            <input
+              type="text"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div>
+            <label>Password: </label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <button type="submit">Login</button>
+        </form>
+      </div>
     </div>
   );
 };

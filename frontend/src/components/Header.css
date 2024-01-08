@@ -36,13 +36,20 @@
   display: flex;
 }
 
-.header .nav a {
+.header .nav a,
+.nav button {
   color: white;
   text-decoration: none;
   margin-left: 20px;
   transition: color 0.3s;
 }
 
-.header .nav a:hover {
+.header .nav a:hover,
+.nav button:hover {
   color: #ddd;
+}
+
+.header .nav button {
+  background-color: chocolate;
+  border: none;
 }
