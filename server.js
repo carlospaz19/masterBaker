@@ -43,9 +43,7 @@ app.post("/register", async (req, res) => {
 // GET to list all users
 app.get("/users", async (req, res) => {
   try {
-    const users = await User.find({}); // Encuentra todos los usuarios
-    // Opcionalmente, puedes limitar la información que se envía al cliente
-    // Por ejemplo, excluyendo las contraseñas y otros datos sensibles
+    const users = await User.find({}); // Find all users
     const userDisplay = users.map((user) => {
       return {
         firstName: user.firstName,
@@ -77,6 +75,27 @@ app.post("/login", async (req, res) => {
     res.json({ token });
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+});
+
+// Validating token
+app.post("/validate_token", (req, res) => {
+  const { token } = req.body;
+
+  if (!token) {
+    return res
+      .status(400)
+      .json({ isValid: false, message: "No token provided." });
+  }
+
+  try {
+    // Verifying token using the 'JWT_SECRET'
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    // If there is no error, the token is valid
+    res.json({ isValid: true, decoded });
+  } catch (error) {
+    // If there is an error, the token is invalidated
+    res.status(401).json({ isValid: false, message: "Invalid token." });
   }
 });
 
