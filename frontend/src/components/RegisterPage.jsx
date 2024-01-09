@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import axios from "axios";
+import api from "../../../api";
 import "./RegisterPage.css";
 
 const RegisterPage = () => {
@@ -17,7 +17,7 @@ const RegisterPage = () => {
 
     try {
       // Registering user
-      await axios.post("https://masterbaker.onrender.com/register", {
+      await api.post("/register", {
         firstName,
         lastName,
         email,
@@ -25,13 +25,10 @@ const RegisterPage = () => {
       });
 
       // After successful login, login is made
-      const loginResponse = await axios.post(
-        "https://masterbaker.onrender.com/login",
-        {
-          email,
-          password,
-        }
-      );
+      const loginResponse = await api.post("/login", {
+        email,
+        password,
+      });
 
       // Token response
       const { token } = loginResponse.data;

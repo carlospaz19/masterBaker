@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import axios from "axios";
+import api from "../../../api";
 import "./LoginPage.css";
 
 const LoginPage = () => {
@@ -14,20 +14,17 @@ const LoginPage = () => {
     event.preventDefault();
 
     try {
-      const response = await axios.post(
-        "https://masterbaker.onrender.com/login",
-        {
-          email,
-          password,
-        }
-      );
+      const response = await api.post("/login", {
+        email,
+        password,
+      });
       const { token } = response.data;
 
       if (token) {
         login(token); // Updates the authentication state and saves the token
         navigate("/");
       } else {
-        console.error("No se recibió token del backend");
+        console.error("Backend token not received");
       }
     } catch (error) {
       console.error("Login Error:", error.response);

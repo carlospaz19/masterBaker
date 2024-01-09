@@ -6,6 +6,8 @@ import Welcome from "./components/Welcome";
 import About from "./components/About";
 import LoginPage from "./components/LoginPage";
 import RegisterPage from "./components/RegisterPage";
+import ProductsPage from "./components/ProductsPage";
+import CartPage from "./components/CartPage";
 import "./App.css";
 
 function App() {
@@ -27,6 +29,8 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/products" element={<ProductsPage />} />
+        <Route path="/cart" element={<CartPage />} />
       </Routes>
       <Footer />
     </Router>

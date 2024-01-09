@@ -40,37 +40,6 @@ app.post("/register", async (req, res) => {
   }
 });
 
-// Middleware to protect routes and verify the JWT token
-const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1]; // Bearer Token
-
-  if (token == null) return res.sendStatus(401);
-
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-    if (err) return res.sendStatus(403);
-    req.user = user;
-    next();
-  });
-};
-
-// Endpoint to obtain the user's info
-app.get("/user", authenticateToken, (req, res) => {
-  // Use the user's ID extracted from the token to look in the DB
-  User.findById(req.user.id, (err, user) => {
-    if (err || !user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-    // Don't return password or sensitive information
-    res.json({
-      id: user._id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-    });
-  });
-});
-
 // GET to list all users
 app.get("/users", async (req, res) => {
   try {
@@ -109,6 +78,40 @@ app.post("/login", async (req, res) => {
   }
 });
 
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+
+  if (token == null) return res.sendStatus(401);
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+
+    req.user = user;
+    console.log(req.user);
+
+    next();
+  });
+};
+
+// Get for User Info
+app.get("/user", authenticateToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json({
+      id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 // Validating token
 app.post("/validate_token", (req, res) => {
   const { token } = req.body;
@@ -125,7 +128,6 @@ app.post("/validate_token", (req, res) => {
     // If there is no error, the token is valid
     res.json({ isValid: true, decoded });
   } catch (error) {
-    // If there is an error, the token is invalidated
     res.status(401).json({ isValid: false, message: "Invalid token." });
   }
 });

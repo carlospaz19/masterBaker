@@ -9,7 +9,6 @@ const orderSchema = new mongoose.Schema({
     },
   ],
   total: { type: Number, required: true },
-  // Puedes agregar más campos según tus necesidades
 });
 
 module.exports = mongoose.model("Order", orderSchema);

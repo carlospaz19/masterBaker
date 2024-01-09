@@ -1,22 +1,19 @@
-import React, { useEffect, useContext } from "react";
+import React, { useContext, useState } from "react";
 import "./Header.css";
 import { Link } from "react-router-dom";
-import { UserContext } from "../contexts/UserContext";
 import { useAuth } from "../contexts/AuthContext";
-import axios from "axios";
+import { useCart } from "../contexts/CartContext";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
-  const { isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
+  const { isAuthenticated, user, logout, cartItems } = useAuth();
+  const { totalQuantity } = useCart();
 
-  // const callAPI = async () => {
-  //   const url = "https://masterbaker.onrender.com/users";
-
-  //   const res = await axios.get(url);
-  //   setUserData(res.data);
-  // };
-  // useEffect(() => {
-  //   callAPI();
-  // }, []);
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
   return (
     <header className="header">
@@ -24,6 +21,11 @@ const Header = () => {
         <img src="/masterBaker_logo.png" />
         <h3>Master Baker</h3>
       </div>
+      {isAuthenticated ? (
+        <>
+          <span>Hello, {user?.firstName}!</span>
+        </>
+      ) : null}
       <nav className="nav">
         <Link to="/">Welcome</Link>
         <Link to="/about">About Us</Link>
@@ -31,7 +33,10 @@ const Header = () => {
           <>
             <Link to="/products">Products</Link>
             <Link to="/cart">Cart</Link>
-            <button onClick={logout}>Logout</button>
+            {totalQuantity > 0 && (
+              <span className="cart-quantity-indicator">{totalQuantity}</span>
+            )}
+            <button onClick={handleLogout}>Logout</button>
           </>
         ) : (
           <>
