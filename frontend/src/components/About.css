@@ -5,6 +5,8 @@
   align-items: center;
   font-size: x-large;
   background-color: bisque;
+  padding-top: 30px;
+  padding-bottom: 30px;
 }
 
 .about-section-left,

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useEffect } from "react";
 import "./Header.css";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
@@ -7,8 +7,14 @@ import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, user, logout, cartItems } = useAuth();
-  const { totalQuantity } = useCart();
+  const { authToken, isAuthenticated, user, logout } = useAuth();
+  const { totalQuantity, fetchCartData } = useCart();
+
+  useEffect(() => {
+    if (authToken) {
+      fetchCartData(authToken);
+    }
+  }, [authToken]);
 
   const handleLogout = () => {
     logout();

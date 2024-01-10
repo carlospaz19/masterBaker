@@ -1,4 +1,5 @@
-import React, { createContext, useState, useEffect, useContext } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
+import { useAuth } from "./AuthContext";
 import api from "../../../api";
 
 const CartContext = createContext(null);
@@ -11,11 +12,11 @@ export const CartProvider = ({ children }) => {
     const storedTotalQuantity = localStorage.getItem("totalQuantity");
     return storedTotalQuantity ? parseInt(storedTotalQuantity, 10) : 0;
   });
+  const { authToken } = useAuth();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      fetchCartData(token);
+    if (authToken) {
+      fetchCartData(authToken);
     }
   }, []);
 

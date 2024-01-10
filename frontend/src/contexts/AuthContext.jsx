@@ -9,8 +9,6 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authToken, setAuthToken] = useState(null);
-  const [cartItems, setCartItems] = useState([]);
-  const [totalQuantity, setTotalQuantity] = useState(0);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -85,9 +83,8 @@ export const AuthProvider = ({ children }) => {
     setAuthToken(null);
     setIsAuthenticated(false);
     setUser(null);
-    setCartItems([]);
-    setTotalQuantity(0);
 
+    // Cleaning Local Storage
     localStorage.removeItem("token");
     localStorage.removeItem("cart");
     localStorage.removeItem("totalQuantity");
