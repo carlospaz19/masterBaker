@@ -1,0 +1,100 @@
+.cart-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: bisque;
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+.cart-page {
+  background: #fff8f0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  font-family: "Courier New", Courier, monospace;
+  text-align: center;
+}
+
+.cart-item {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr; /* Columns distribution */
+  align-items: center;
+  border-bottom: 1px dashed #ccc;
+  padding: 10px;
+}
+
+.cart-item h2 {
+  text-align: left;
+  margin: 0px;
+}
+
+.cart-item .price,
+.cart-item .quantity {
+  text-align: center;
+}
+
+.cart-item:last-child {
+  border-bottom: none;
+}
+
+.remove-item-btn {
+  background: #f44336;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  justify-self: end;
+  width: 100%;
+  max-width: 100px;
+  text-align: center;
+}
+
+.remove-item-btn:hover {
+  background: #c33d2e;
+}
+
+.cart-total {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  font-weight: bold;
+  padding: 10px;
+}
+
+.paypal-button {
+  margin-top: 20px;
+  margin-right: 100px;
+}
+
+@media only screen and (min-width: 391px) and (max-width: 767px) {
+  .cart-page {
+    width: 80%;
+  }
+
+  .cart-item {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+@media only screen and (max-width: 391px) {
+  .cart-page {
+    width: 80%;
+  }
+
+  .cart-item {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .remove-item-btn {
+    width: 80px;
+  }
+}

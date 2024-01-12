@@ -1,0 +1,135 @@
+.header {
+  width: 100%;
+  background-color: chocolate;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header .logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+.header .logo img {
+  filter: invert(100%) brightness(100%);
+  width: 50px;
+  height: auto;
+}
+
+.header .logo h3 {
+  margin-left: 10px;
+}
+
+.logo {
+  padding-left: 30px;
+}
+
+.nav {
+  padding-right: 30px;
+}
+
+.header .nav {
+  display: flex;
+}
+
+.header .nav a,
+.nav button {
+  color: white;
+  text-decoration: none;
+  margin-left: 20px;
+  transition: color 0.3s;
+}
+
+.header .nav a:hover,
+.nav button:hover {
+  color: #ddd;
+}
+
+.header .nav button {
+  background-color: chocolate;
+  border: none;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 1em;
+}
+
+.cart-quantity-indicator {
+  background-color: black;
+  color: white;
+  border-radius: 50%;
+  padding: 0.5em;
+  margin-left: 0.5em;
+  font-size: 0.65em;
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+  .nav {
+    display: flex;
+    align-items: center;
+  }
+
+  .header span {
+    display: flex;
+    text-align: center;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .header {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .greeting {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .header .logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0px;
+  }
+
+  .header span {
+    margin-bottom: 20px;
+  }
+
+  .header .nav {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0px;
+    margin-bottom: 20px;
+    gap: 15px;
+    font-size: 15px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .nav .loggedin {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .header .nav a,
+  .header .nav button,
+  .header .nav span {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    margin: 0;
+    transition: color 0.3s;
+  }
+
+  .cart-quantity-indicator {
+    margin-left: 8px;
+  }
+}
