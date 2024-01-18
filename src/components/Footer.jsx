@@ -1,4 +1,3 @@
-import React from "react";
 import linkedInLogo from "/linkedin_logo.jpeg";
 import "./Footer.css";
 

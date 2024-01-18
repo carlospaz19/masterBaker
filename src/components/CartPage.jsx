@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useCart } from "../contexts/CartContext";
 import "./CartPage.css";
@@ -20,7 +20,11 @@ const CartPage = () => {
     }, 0);
   };
 
+  const mxnToDolar = 18;
   const totalAmount = calculateTotal();
+
+  const totalToPay = totalAmount / mxnToDolar;
+  const usdTotalToPay = parseFloat(totalToPay.toFixed(2));
 
   const hasItemsInCart = cartItems.length > 0;
 
@@ -49,7 +53,7 @@ const CartPage = () => {
                 <ButtonPaypal
                   currency={"USD"}
                   showSpinner={false}
-                  amount={totalAmount * 0.59}
+                  amount={usdTotalToPay}
                 />
               </div>
             )}
