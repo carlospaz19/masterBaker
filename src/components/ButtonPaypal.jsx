@@ -1,8 +1,12 @@
 import { useEffect } from "react";
+import { useCart } from "../contexts/CartContext";
+import { useAuth } from "../contexts/AuthContext";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 
 export const ButtonPaypal = ({ currency, showSpinner, amount }) => {
   const [{ options, isPending }, dispatch] = usePayPalScriptReducer();
+  const { authToken } = useAuth();
+  const { cartItems, removeFromCart, fetchCartData } = useCart();
 
   useEffect(() => {
     dispatch({
@@ -12,6 +16,7 @@ export const ButtonPaypal = ({ currency, showSpinner, amount }) => {
         currency: currency,
       },
     });
+    fetchCartData(authToken);
   }, [currency, showSpinner]);
 
   const style = { layout: "vertical" };
@@ -44,6 +49,11 @@ export const ButtonPaypal = ({ currency, showSpinner, amount }) => {
         onApprove={function (data, actions) {
           return actions.order.capture().then(function () {
             console.log("APPROVE");
+            cartItems.forEach((item) => {
+              removeFromCart(item.productId._id, authToken);
+            });
+
+            fetchCartData(authToken);
           });
         }}
       />
