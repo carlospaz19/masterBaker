@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import api from "../../backend/api";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "./RegisterPage.css";
 
 const RegisterPage = () => {
@@ -11,8 +12,13 @@ const RegisterPage = () => {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [passwordShown, setPasswordShown] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
+
+  const togglePassword = () => {
+    setPasswordShown(!passwordShown);
+  };
 
   const handleRegister = async (event) => {
     event.preventDefault();
@@ -109,11 +115,18 @@ const RegisterPage = () => {
             </div>
             <div>
               <label>Password: </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+              <div className="password-container">
+                <input
+                  type={passwordShown ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  name="password"
+                  className="password-input"
+                />
+                <i onClick={togglePassword} className="password-icon">
+                  {passwordShown ? <FaEyeSlash /> : <FaEye />}
+                </i>
+              </div>
             </div>
             <button type="submit">Register</button>
           </form>
